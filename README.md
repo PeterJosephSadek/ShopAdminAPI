@@ -30,8 +30,8 @@ A full-featured .NET-based solution for managing an E-commerce platform. This pr
 ---
 
 ## 📁 Project Structure
+- **ECommerceDashboard:**          ASP.NET Core MVC project for the admin dashboard
+- **ECommerceAPI:**                ASP.NET Core Web API for customer-facing features
+- **ECommerceDashboard.BLL:**      Business Logic Layer (services, business rules)
+- **ECommerceDashboard.DAL:**      Data Access Layer (Entity Framework, database context, repositories)
 
-/AdminDashboard # Web dashboard for admins
-/ECommerce.API # RESTful API for customers
-/ECommerce.Shared # Shared models and business logic
-/ECommerce.Data # Database context and EF Core migrations
