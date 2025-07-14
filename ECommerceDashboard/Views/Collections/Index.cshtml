@@ -1,0 +1,68 @@
+﻿@model IEnumerable<ECommerceDashboard.DAL.Entities.Products.Collection>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Collections</h1>
+
+
+<div class="row g-4">
+    <div class="col-12 ">
+
+        <!-- Example-->
+        <div class="card mb-4">
+            <div class="card-header d-flex justify-content-between">
+                @* <h4 class="card-title">Collections</h4> *@
+                <a class="btn btn-sm btn-primary" asp-action="create" ><i class="ri-add-circle-line align-bottom"></i> Create New</a>
+            </div>
+            <div class="card-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Description</th>
+                            <th scope="col">Created Date</th>
+                            <th scope="col">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Id)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Name)
+                                </td>
+                                <td class="text-truncate" style="max-width:200px">
+                                    @Html.DisplayFor(modelItem => item.Description)
+                                </td>
+                                <td>
+                                    @item.CreatedOn.ToString("MMM dd yyyy 'at' hh:MM tt")
+                                </td>
+                                <td>
+                                    <div class="dropdown">
+                                        <button class="btn btn-link dropdown-toggle dropdown-toggle-icon fw-bold p-0" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <i class="ri-menu-fill"></i>
+                                        </button>
+                                        <ul class="dropdown-menu dropdown" aria-labelledby="dropdownMenuButton1" style="">
+                                            <li><a class="dropdown-item" asp-action="details" asp-route-id="@item.Id">Details</a></li>
+                                            <li><a class="dropdown-item" asp-action="Delete" asp-route-id="@item.Id">Delete</a></li>
+                                            <li><a class="dropdown-item" asp-action="Edit" asp-route-id="@item.Id">Edit</a></li>
+                                        </ul>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!-- /Example-->
+
+    </div>
+</div>
+

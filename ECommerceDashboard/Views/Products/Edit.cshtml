@@ -1,0 +1,73 @@
+﻿@model ECommerceDashboard.DAL.Entities.Products.Product
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h2 class="fs-3 fw-bold mb-2">Edit Product</h2>
+<p class="text-muted mb-5">Added On @Model.CreatedOn.ToString("dd'th' MMM 'at' hh:mm tt ")</p>
+
+<div class="col-12 col-md-6">
+
+    <div class="card mb-4">
+        <div class="card-header justify-content-between align-items-center d-flex">
+            <h6 class="card-title m-0">Edit Product</h6>
+        </div>
+        <div class="card-body">
+            <form asp-action="edit">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="Name" class="control-label"></label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Price" class="control-label"></label>
+                    <div class="input-group">
+                        <span class="input-group-text">EGP</span>
+                        <input asp-for="Price" type="text" class="form-control" aria-label="Amount (to the nearest dollar)">
+                        <span class="input-group-text">.00</span>
+                    </div>
+                    <span asp-validation-for="Price" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Description" class="form-label"></label>
+                    <textarea asp-for="Description" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                    <div class="form-text">
+                        This Description Will Appear in the Description section for this product
+                    </div>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="CollectionId" class="control-label">Collection</label>
+                    <select asp-for="CollectionId" class="form-control" asp-items="ViewBag.CollectionId"></select>
+                    <div class="form-text">
+                        The Product will be in This Collection
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="CategoryId" class="control-label">Category</label>
+                    <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.CategoryId"></select>
+                    <div class="form-text">
+                        The Product will be in This Catergory
+                    </div>
+                </div>
+                <input asp-for=CreatedOn hidden />
+                <input asp-for=Id hidden />
+                <input asp-for=IsDeleted hidden />
+                <div class="form-group">
+                    <input type="submit" value="Create" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+</div>
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
