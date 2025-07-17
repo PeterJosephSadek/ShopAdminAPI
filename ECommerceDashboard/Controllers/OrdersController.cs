@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using ECommerceDashboard.BLL.Interfaces;
 using ECommerceDashboard.DAL.Contexts;
 using ECommerceDashboard.DAL.Entities.Orders;
+using ECommerceDashboard.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -48,84 +49,24 @@ namespace ECommerceDashboard.Controllers
 
 
         [HttpGet]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            // Get all products for the dropdown
-            var products =  _unitOfWork.ProductRepository.GetAll();
-            ViewBag.Products = new SelectList(products, "Id", "Name");
+            var CreateOrder = new CreateOrderViewModel();
+            CreateOrder.AvailableProducts = _unitOfWork.ProductRepository.GetAll();
 
-            // Create a new order with one empty OrderItem to start
-            var order = new Order
-            {
-                OrderItems = new List<OrderItem>
-            {
-                new OrderItem()
-            }
-            };
 
-            return View(order);
+            return View(CreateOrder);
         }
 
         // POST: Orders/Create
         // POST: Order/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Order order)
+        public async Task<IActionResult> Create(CreateOrderViewModel CreateOrder)
         {
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    // Remove any empty OrderItems
-                    order.OrderItems = order.OrderItems?.Where(oi => oi.ProductId > 0 && oi.Quantity > 0).ToList();
 
-                    if (order.OrderItems != null && order.OrderItems.Any())
-                    {
-                        // Get product prices and calculate OrderItem prices
-                        var productIds = order.OrderItems.Select(oi => oi.ProductId).ToList();
-                        var productss = await _context.Products
-                            .Where(p => productIds.Contains(p.Id))
-                            .ToDictionaryAsync(p => p.Id, p => p.Price);
 
-                        foreach (var item in order.OrderItems)
-                        {
-                            if (productss.ContainsKey(item.ProductId))
-                            {
-                                item.Price = productss[item.ProductId] * item.Quantity;
-                            }
-                        }
-
-                        // Calculate total price
-                        order.TotalPrice = order.OrderItems.Sum(oi => oi.Price);
-
-                        _context.Orders.Add(order);
-                        await _context.SaveChangesAsync();
-
-                        TempData["Success"] = "Order created successfully!";
-                        return RedirectToAction("Index");
-                    }
-                    else
-                    {
-                        ModelState.AddModelError("", "Please add at least one product to the order.");
-                    }
-                }
-                catch (Exception ex)
-                {
-                    ModelState.AddModelError("", "An error occurred while creating the order. Please try again.");
-                }
-            }
-
-            // If we got this far, something failed, redisplay form
-            var products = await _context.Products.ToListAsync();
-            ViewBag.Products = new SelectList(products, "Id", "Name");
-
-            // Ensure we have at least one OrderItem for the form
-            if (order.OrderItems == null || !order.OrderItems.Any())
-            {
-                order.OrderItems = new List<OrderItem> { new OrderItem() };
-            }
-
-            return View(order);
+            return View(CreateOrder);
         }
 
         // AJAX endpoint to get product price
