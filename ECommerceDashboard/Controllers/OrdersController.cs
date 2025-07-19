@@ -16,12 +16,10 @@ namespace ECommerceDashboard.Controllers
     public class OrdersController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly ECommerceDbContext _context;
 
-        public OrdersController(IUnitOfWork unitOfWork, ECommerceDbContext context)
+        public OrdersController(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
-            _context = context;
         }
 
         // GET: Orders
@@ -71,9 +69,9 @@ namespace ECommerceDashboard.Controllers
 
         // AJAX endpoint to get product price
         [HttpGet]
-        public async Task<JsonResult> GetProductPrice(int productId)
+        public  JsonResult GetProductPrice(int productId)
         {
-            var product = await _context.Products.FindAsync(productId);
+            var product = _unitOfWork.ProductRepository.GetById(productId);
             if (product != null)
             {
                 return Json(new { success = true, price = product.Price });
