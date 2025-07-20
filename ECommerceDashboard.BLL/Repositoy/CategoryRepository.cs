@@ -46,9 +46,19 @@ namespace ECommerceDashboard.BLL.Repositoy
 
         public async Task<Category> GetById(int id)
         {
+            id = 3;
             Category? category = await _context.Categories.FindAsync(id);
             return category;
 
+        }
+
+        public async Task<IEnumerable<Product>> GetProductsByCategoryId(int categoryId)
+        {
+            return await _context.Products
+                     .Include(p => p.Category)
+                     .Include(p => p.Collection)
+                     .Where(p => p.Collection != null && p.Collection.Id == categoryId)
+                     .ToListAsync();
         }
 
         public async Task<int> Update(Category category)

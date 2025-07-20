@@ -17,9 +17,22 @@ namespace ECommerceAPI.Controllers
             _unitOfWork = unitOfWork;
         }
 
+        [HttpGet]
         public ActionResult<IEnumerable<Product>> Get()
         {
-            var products = _unitOfWork.ProductRepository.GetAll();
+            var products = _unitOfWork.ProductRepository.GetAll().
+                Select(product => new ProductToReturnDTO()
+                {
+                    Id = product.Id,
+                    Name = product.Name,
+                    Category = product.Category?.Name ?? "No Category",
+                    CategoryId = product.Category?.Id ?? 0,
+                    Collection = product.Collection?.Name ?? "No Collection",
+                    CollectionId = product.Collection?.Id ?? 0,
+                    Description = product.Description ?? "No Description",
+                    Price = product.Price,
+                });
+
             return Ok(products);
         }
 

@@ -12,6 +12,7 @@ namespace ECommerceDashboard.BLL.Interfaces
     {
         Task<IEnumerable<Collection>> GetAll();
         Task<Collection> GetById(int id);
+        Task<IEnumerable<Product>> GetProductsByCollectionId(int collectionId);
         Task<int> Add(Collection collection);
         Task<int> Update(Collection collection);
         Task<int> Delete(int id);

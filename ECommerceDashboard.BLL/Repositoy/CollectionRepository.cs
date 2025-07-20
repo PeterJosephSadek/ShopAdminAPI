@@ -49,6 +49,15 @@ namespace ECommerceDashboard.BLL.Repositoy
             return collection;
         }
 
+        public async Task<IEnumerable<Product>> GetProductsByCollectionId(int collectionId)
+        {
+             return await _context.Products
+                     .Include(p => p.Category)
+                     .Include(p => p.Collection)
+                     .Where(p => p.Collection != null && p.Collection.Id == collectionId)
+                     .ToListAsync();
+        }
+
         public async Task<int> Update(Collection collection)
         {
             _context.Collections.Update(collection);
