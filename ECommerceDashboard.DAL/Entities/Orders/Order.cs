@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ECommerceDashboard.DAL.Entities.Orders
 {
@@ -21,6 +22,9 @@ namespace ECommerceDashboard.DAL.Entities.Orders
         public DateTime? CreatedOn { get; set; }
         public bool IsDeleted { get; set; }
 
+        [Required]
+        [ForeignKey("Delivery")]
+        public int DeliveryId { get; set; }
         public Delivery? Delivery { get; set; }
         public Status? Status { get; set; }
         public virtual ICollection<OrderItem>? OrderItems { get; set; }

@@ -1,4 +1,5 @@
 ﻿using ECommerceAPI.Dtos;
+using ECommerceAPI.Errors;
 using ECommerceDashboard.BLL.Interfaces;
 using ECommerceDashboard.DAL.Entities.Products;
 using Microsoft.AspNetCore.Http;
@@ -16,19 +17,30 @@ namespace ECommerceAPI.Controllers
         {
             _unitOfWork = unitOfWork;
         }
-/*
-        public ActionResult<IEnumerable<Collection>> Get()
+
+        [HttpGet]
+        public ActionResult<IEnumerable<Collection>> GetAll()
         {
             var collections = _unitOfWork.CollectionRepository.GetAll();
             return Ok(collections);
-        }*/
+        }
+
+        [HttpGet("{id}")]
+        public ActionResult<Collection> GetById(int id)
+        { 
+            var collection = _unitOfWork.CollectionRepository.GetById(id);
+
+            if (collection == null) return NotFound(new ApiResponse(404));
+
+            return Ok(collection);
+            
+        }
 
 
         // GET: api/collections/{collectionId}/items
         [HttpGet("{collectionId}/items")]
         public async Task<IActionResult> GetItemsForCollection(int collectionId)
         {
-            // Logic to get items belonging to the collection
             var products = await _unitOfWork.CollectionRepository.GetProductsByCollectionId(collectionId);
 
             var Dtos= products.Select(product => new ProductToReturnDTO

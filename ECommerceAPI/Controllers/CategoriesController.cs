@@ -1,4 +1,5 @@
 ﻿using ECommerceAPI.Dtos;
+using ECommerceAPI.Errors;
 using ECommerceDashboard.BLL.Interfaces;
 using ECommerceDashboard.DAL.Entities.Products;
 using Microsoft.AspNetCore.Http;
@@ -17,11 +18,18 @@ namespace ECommerceAPI.Controllers
             _unitOfWork = unitOfWork;
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Get() 
+        {
+            var categories = await _unitOfWork.CategoryRepository.GetAll();
+            return Ok(categories);
+        }
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int Id)
         {
-            Id = 3;
             Category Category = await _unitOfWork.CategoryRepository.GetById(Id);
+            if (Category == null) return NotFound(new ApiResponse(404));
             return Ok(Category);
         }
 

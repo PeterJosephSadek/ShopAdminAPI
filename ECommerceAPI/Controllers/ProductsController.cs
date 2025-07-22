@@ -1,4 +1,5 @@
 ﻿using ECommerceAPI.Dtos;
+using ECommerceAPI.Errors;
 using ECommerceDashboard.BLL.Interfaces;
 using ECommerceDashboard.DAL.Entities.Products;
 using Microsoft.AspNetCore.Http;
@@ -40,6 +41,8 @@ namespace ECommerceAPI.Controllers
         public ActionResult<Product> GetById(int Id) 
         {
             Product product = _unitOfWork.ProductRepository.GetById(Id);
+
+            if(product == null) return NotFound(new ApiResponse(404));
 
             ProductToReturnDTO Dto = new ProductToReturnDTO()
             {

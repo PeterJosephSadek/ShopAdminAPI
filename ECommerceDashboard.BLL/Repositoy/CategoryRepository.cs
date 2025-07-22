@@ -46,7 +46,6 @@ namespace ECommerceDashboard.BLL.Repositoy
 
         public async Task<Category> GetById(int id)
         {
-            id = 3;
             Category? category = await _context.Categories.FindAsync(id);
             return category;
 

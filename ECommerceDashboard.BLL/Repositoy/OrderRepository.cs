@@ -21,6 +21,7 @@ namespace ECommerceDashboard.BLL.Repositoy
         public async Task<int> Add(Order order)
         {
             order.CreatedOn = DateTime.Now;
+            order.TotalPrice = order.OrderItems.Sum(o=>o.Price) * order.OrderItems.Sum(o => o.Quantity);
             await _context.Orders.AddAsync(order);
             return await _context.SaveChangesAsync();
         }

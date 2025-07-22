@@ -22,6 +22,37 @@
                         </tr>
                     </thead>
                     <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <span class="fw-bolder">#@item.Id</span>
+                                </td>
+                                <td>@item.CustomerName</td>
+                                <td class="text-muted">@item.CreatedOn.ToString() @* 24th June, 2021 *@</td>
+                                <td class="text-muted">
+                                    <div class="d-flex align-items-center">
+                                        <i class="ri-visa-line ri-lg me-2"></i> **** 6789
+                                    </div>
+                                </td>
+                                <td class="text-muted">@item.OrderItems.Sum(o=>o.Quantity)</td>
+                                <th class="text-muted">$@item.TotalPrice</th>
+                                <td><span class="badge rounded-pill bg-orange-faded text-orange">Panding</span></td>
+                                <td>
+                                    <div class="dropdown">
+                                        <button class="btn btn-link dropdown-toggle dropdown-toggle-icon fw-bold p-0" type="button" id="dropdownOrder-0" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <i class="ri-more-2-line"></i>
+                                        </button>
+                                        <ul class="dropdown-menu dropdown" aria-labelledby="dropdownOrder-0">
+                                            <li><a class="dropdown-item" href="#">Action</a></li>
+                                            <li><a class="dropdown-item" href="#">Another action</a></li>
+                                            <li><a class="dropdown-item" href="#">Something else here</a></li>
+                                        </ul>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                        @* 
                         <tr>
                             <td>
                                 <span class="fw-bolder">#1234-5679</span>
@@ -184,6 +215,7 @@
                                 </div>
                             </td>
                         </tr>
+                         *@
                     </tbody>
                 </table>
             </div>
