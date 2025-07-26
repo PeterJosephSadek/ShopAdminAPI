@@ -50,7 +50,9 @@ namespace ECommerceDashboard.Controllers
         public async Task<IActionResult> Create()
         {
             var CreateOrder = new CreateOrderViewModel();
-            CreateOrder.AvailableProducts = _unitOfWork.ProductRepository.GetAll();
+           ViewData["DeliveryId"] = new SelectList(await _unitOfWork.DeliveryRepository.GetAll(), "Id", "Region");
+
+            CreateOrder.AvailableProducts =  _unitOfWork.ProductRepository.GetAll();
 
 
             return View(CreateOrder);
@@ -62,9 +64,38 @@ namespace ECommerceDashboard.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CreateOrderViewModel CreateOrder)
         {
+            try
+            {
+                Order order = new Order();
+                order.CustomerName = CreateOrder.CustomerName;
+                order.PhoneNumber = CreateOrder.PhoneNumber;
+                order.AddressLocation = CreateOrder.AddressLocation;
+                order.Address = CreateOrder.Address;
+                order.Comment = CreateOrder.Comment;
+                order.DeliveryId = 2;
+                order.Status = null;
+
+                order.OrderItems = CreateOrder.OrderItems.Select(i => new OrderItem
+                {
+                    ProductId = i.ProductId,
+                    Price = i.Price,
+                    Quantity = i.Quantity
+                }).ToList();
+
+                ViewData["DeliveryId"] = new SelectList(await _unitOfWork.DeliveryRepository.GetAll(), "Id", "Region");
+                await _unitOfWork.OrderRepository.Add(order);
+                return View("Index");
+
+            }
+            catch (Exception)
+            {
+
+                CreateOrder.AvailableProducts = _unitOfWork.ProductRepository.GetAll();
+                ViewData["DeliveryId"] = new SelectList(await _unitOfWork.DeliveryRepository.GetAll(), "Id", "Region");
+                return View(CreateOrder);
+            }
 
 
-            return View(CreateOrder);
         }
 
         // AJAX endpoint to get product price

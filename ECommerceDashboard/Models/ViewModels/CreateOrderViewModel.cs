@@ -25,6 +25,10 @@ namespace ECommerceDashboard.Models.ViewModels
         [Display(Name = "Comment")]
         public string? Comment { get; set; }
 
+        [Required]
+        [Display(Name = "Delivery Method")]
+        public int DeliveryId { get; set; }
+
         // Order Items (will be populated via JavaScript)
         public List<OrderItemViewModel> OrderItems { get; set; } = new List<OrderItemViewModel>();
 
