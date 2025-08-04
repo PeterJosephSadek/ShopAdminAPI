@@ -37,26 +37,5 @@ namespace ECommerceAPI.Controllers
         }
 
 
-        // GET: api/collections/{collectionId}/items
-        [HttpGet("{collectionId}/items")]
-        public async Task<IActionResult> GetItemsForCollection(int collectionId)
-        {
-            var products = await _unitOfWork.CollectionRepository.GetProductsByCollectionId(collectionId);
-
-            var Dtos= products.Select(product => new ProductToReturnDTO
-             {
-                 Id = product.Id,
-                 Name = product.Name,
-                 Category = product.Category?.Name ?? "No Category",
-                 CategoryId = product.Category?.Id ?? 0,
-                 Collection = product.Collection?.Name ?? "No Collection",
-                 CollectionId = product.Collection?.Id ?? 0,
-                 Description = product.Description ?? "No Description",
-                 Price = product.Price,
-             });
-            
-             return Ok(Dtos);
-        }
-
     }
 }

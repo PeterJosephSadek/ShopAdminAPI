@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.PortableExecutable;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -22,9 +23,21 @@ namespace ECommerceDashboard.BLL.Repositoy
 
         public async Task<int> Add(Review review)
         {
-            review.CreatedOn = DateTime.Now;
-            await _context.Reviews.AddAsync(review);
-            return await _context.SaveChangesAsync();
+            try
+            {
+                int MaxStarsNumber = 5;
+                if (review.Stars > MaxStarsNumber) review.Stars = MaxStarsNumber;
+                if (review.Stars < 0) review.Stars = 0;
+
+                review.CreatedOn = DateTime.Now;
+                await _context.Reviews.AddAsync(review);
+                return await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                return 0;
+            }
+
         }
 
         public async Task<int> Delete(int id)

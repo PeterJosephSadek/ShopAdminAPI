@@ -32,28 +32,6 @@ namespace ECommerceAPI.Controllers
             if (Category == null) return NotFound(new ApiResponse(404));
             return Ok(Category);
         }
-
-
-        // GET: api/categories/{categoryId}/items
-        [HttpGet("{categoryId}/items")]
-        public async Task<IActionResult> GetItemsForCategory(int categoryId)
-        {
-            // Logic to get items belonging to the collection
-            var products = await _unitOfWork.CategoryRepository.GetProductsByCategoryId(categoryId);
-
-            var Dtos = products.Select(product => new ProductToReturnDTO
-            {
-                Id = product.Id,
-                Name = product.Name,
-                Category = product.Category?.Name ?? "No Category",
-                CategoryId = product.Category?.Id ?? 0,
-                Collection = product.Collection?.Name ?? "No Collection",
-                CollectionId = product.Collection?.Id ?? 0,
-                Description = product.Description ?? "No Description",
-                Price = product.Price,
-            });
-
-            return Ok(Dtos);
-        }
+     
     }
 }

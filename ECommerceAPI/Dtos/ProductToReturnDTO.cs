@@ -15,5 +15,6 @@ namespace ECommerceAPI.Dtos
 
         public int CategoryId { get; set; }
         public string? Category { get; set; }
+        public List<ReviewDto>? Reviews { get; set; }
     }
 }

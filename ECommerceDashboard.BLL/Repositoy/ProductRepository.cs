@@ -47,15 +47,39 @@ namespace ECommerceDashboard.BLL.Repositoy
             return products;
         }
 
+        public IQueryable<Product> GetAllByCategory(int categoryId)
+        {
+            return _context.Products
+                           .Where(p => p.CategoryId == categoryId);
+        }
+
+        public IQueryable<Product> GetAllByCollection(int collectionId)
+        {
+            return _context.Products
+               .Where(p => p.CollectionId == collectionId)
+               .Include(p => p.Category)
+               .Include(p => p.Collection);
+
+        }
+
         public Product GetById(int id)
         {
             Product? product = _context.Products
              .Include(p => p.Category)
              .Include(p => p.Collection)
+             .Include(p => p.Reviews)
              .Where(m => m.Id == id)
              .FirstOrDefault();
 
             return (product);
+        }
+
+        public IQueryable<Product> GetProductBySearch(string searchWord)
+        {
+            return _context.Products.Where(p => p.Name.Contains(searchWord))
+                .Include(p => p.Category)
+                .Include(p => p.Collection);
+
         }
 
         public int Update(Product product)

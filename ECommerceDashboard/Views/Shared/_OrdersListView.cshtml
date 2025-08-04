@@ -26,18 +26,26 @@
                         {
                             <tr>
                                 <td>
-                                    <span class="fw-bolder">#@item.Id</span>
+                                    <span class="fw-bolder"><a asp-controller="Orders" asp-action="details" asp-route-id="@item.Id">#@item.Id</a></span>
                                 </td>
                                 <td>@item.CustomerName</td>
-                                <td class="text-muted">@item.CreatedOn.ToString() @* 24th June, 2021 *@</td>
+                                <td class="text-muted">@item.CreatedOn</td>
                                 <td class="text-muted">
                                     <div class="d-flex align-items-center">
-                                        <i class="ri-visa-line ri-lg me-2"></i> **** 6789
+                                        @item.Delivery.Region
                                     </div>
                                 </td>
                                 <td class="text-muted">@item.OrderItems.Sum(o=>o.Quantity)</td>
                                 <th class="text-muted">$@item.TotalPrice</th>
-                                <td><span class="badge rounded-pill bg-orange-faded text-orange">Panding</span></td>
+                                <td>@if (item.Status != null)
+                                    {
+                                        <span class="badge rounded-pill bg-@item.Status.Color">@item.Status.Name</span>
+
+                                    }else{
+                                    <span class="badge rounded-pill bg-orange">Panding</span>
+
+                                    }
+                                    </td>
                                 <td>
                                     <div class="dropdown">
                                         <button class="btn btn-link dropdown-toggle dropdown-toggle-icon fw-bold p-0" type="button" id="dropdownOrder-0" data-bs-toggle="dropdown" aria-expanded="false">

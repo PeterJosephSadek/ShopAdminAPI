@@ -48,16 +48,83 @@ namespace ECommerceAPI.Controllers
             {
                 Id = Id,
                 Name = product.Name,
-                Category = product.Category?.Name?? "No Category",
+                Category = product.Category?.Name ?? "No Category",
                 CategoryId = product.Category?.Id ?? 0,
                 Collection = product.Collection?.Name ?? "No Collection",
                 CollectionId = product.Collection?.Id ?? 0,
-                Description = product.Description?? "No Description",
+                Description = product.Description ?? "No Description",
                 Price = product.Price,
+                Reviews = product.Reviews?.Select(r => new ReviewDto
+                    {
+                        CustomerName = r.CustomerName,
+                        ProductId = r.ProductId,
+                        Stars = r.Stars,
+                        Text = r.Text,
+                        Title = r.Title
+                    }).ToList()
             };
 
             return Ok(Dto);
         }
 
+        [HttpGet("byCategory")]
+        public ActionResult<IQueryable<Product>> GetProductsByCategory([FromQuery] int CategoryId)
+        {
+            var products =  _unitOfWork.ProductRepository.GetAllByCategory(CategoryId);
+
+            var Dtos = products.Select(product => new ProductToReturnDTO
+            {
+                Id = product.Id,
+                Name = product.Name,
+                Collection = product.Collection.Name ?? "No Collection",
+                CollectionId = product.CollectionId,
+                Category = product.Category.Name ?? "No Collection",
+                CategoryId = product.CategoryId,
+                Description = product.Description ?? "No Description",
+                Price = product.Price,
+            });
+
+            return Ok(Dtos);
+        }
+
+        [HttpGet("byCollection")]
+        public ActionResult<IQueryable<Product>> GetProductsByCollection([FromQuery] int CollectionId)
+        {
+            var products = _unitOfWork.ProductRepository.GetAllByCollection(CollectionId);
+
+            var Dtos = products.Select(product => new ProductToReturnDTO
+            {
+                Id = product.Id,
+                Name = product.Name,
+                Collection = product.Collection.Name ?? "No Collection",
+                CollectionId = product.CollectionId,
+                Category = product.Category.Name ?? "No Collection",
+                CategoryId = product.CategoryId,
+                Description = product.Description ?? "No Description",
+                Price = product.Price,
+            });
+
+            return Ok(Dtos);
+        }
+
+        [HttpGet("BySearch")]
+        public ActionResult<IQueryable<Product>> GetProductsBySearch([FromQuery] string searchWord)
+        {
+            var products = _unitOfWork.ProductRepository.GetProductBySearch(searchWord);
+
+            var Dtos = products.Select(product => new ProductToReturnDTO
+            {
+                Id = product.Id,
+                Name = product.Name,
+                Collection = product.Collection.Name ?? "No Collection",
+                CollectionId = product.CollectionId,
+                Category = product.Category.Name ?? "No Collection",
+                CategoryId = product.CategoryId,
+                Description = product.Description ?? "No Description",
+                Price = product.Price,
+            });
+
+            return Ok(Dtos);
+        }
     }
 }

@@ -10,6 +10,11 @@ namespace ECommerceDashboard.BLL.Interfaces
     public interface IProductRepository
     {
         IEnumerable<Product> GetAll();
+        IQueryable<Product> GetAllByCategory(int categoryId);
+        IQueryable<Product> GetAllByCollection(int collectionId);
+
+        IQueryable<Product> GetProductBySearch(string searchWord);
+
         Product GetById(int id);
         int Add(Product collection);
         int Update(Product collection);

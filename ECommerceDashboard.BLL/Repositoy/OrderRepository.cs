@@ -43,6 +43,7 @@ namespace ECommerceDashboard.BLL.Repositoy
                   .Include(o => o.Status)
                  .Include(o => o.Delivery)
                  .Include(o => o.OrderItems)
+                 .OrderBy(o=>o.Status)
                  .AsNoTracking()
                  .ToListAsync();
         }
@@ -53,6 +54,7 @@ namespace ECommerceDashboard.BLL.Repositoy
                   .Include(o => o.Status)
                   .Include(o => o.Delivery)
                   .Include(o => o.OrderItems)
+                    .ThenInclude(oi=>oi.Product)
                   .FirstOrDefaultAsync(m => m.Id == id);
 
             return (Order);
