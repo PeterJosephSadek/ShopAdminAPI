@@ -5,12 +5,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ECommerceDashboard.BLL.Interfaces
+namespace ECommerceDashboard.DAL.Interfaces
 {
     public interface IOrderRepository
     {
-        Task<IEnumerable<Order>> GetAll();
-        Task<Order> GetById(int? id);
+        IQueryable<Order> GetAll();
+        Task<Order> GetById(int id);
         Task<int> Add(Order order);
         Task<int> Update(Order order);
         Task<int> Delete(int id);

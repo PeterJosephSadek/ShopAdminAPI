@@ -5,19 +5,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ECommerceDashboard.BLL.Interfaces
+namespace ECommerceDashboard.DAL.Interfaces
 {
     public interface IProductRepository
     {
-        IEnumerable<Product> GetAll();
+        IQueryable<Product> GetAll();
         IQueryable<Product> GetAllByCategory(int categoryId);
         IQueryable<Product> GetAllByCollection(int collectionId);
-
         IQueryable<Product> GetProductBySearch(string searchWord);
 
-        Product GetById(int id);
-        int Add(Product collection);
-        int Update(Product collection);
-        int Delete(int id);
+        Task<Product> GetById(int? id);
+        Task<int> Add(Product collection);
+        Task<int> Update(Product collection);
+        Task<int> Delete(int? id);
     }
 }

@@ -5,10 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using ECommerceDashboard.BLL.Repositoy;
-using ECommerceDashboard.DAL.Contexts;
-using ECommerceDashboard.BLL.Interfaces;
 using ECommerceDashboard.DAL.Entities.Products;
+using ECommerceDashboard.DAL.Interfaces;
 
 namespace ECommerceDashboard.Controllers
 {
@@ -23,9 +21,9 @@ namespace ECommerceDashboard.Controllers
 
 
         // GET: Collections
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var collections = await _unitOfWork.CollectionRepository.GetAll();
+            var collections =  _unitOfWork.CollectionRepository.GetAll();
             return View(collections);
         }
 

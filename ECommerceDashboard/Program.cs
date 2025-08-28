@@ -1,6 +1,6 @@
-using ECommerceDashboard.BLL.Interfaces;
-using ECommerceDashboard.BLL.Repositoy;
 using ECommerceDashboard.DAL.Contexts;
+using ECommerceDashboard.DAL.Interfaces;
+using ECommerceDashboard.DAL.Repositoy;
 using Microsoft.EntityFrameworkCore;
 
 namespace ECommerceDashboard

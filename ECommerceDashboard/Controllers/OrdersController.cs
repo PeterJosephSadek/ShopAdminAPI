@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using ECommerceDashboard.BLL.Interfaces;
-using ECommerceDashboard.DAL.Contexts;
-using ECommerceDashboard.DAL.Entities.Orders;
+﻿using ECommerceDashboard.DAL.Entities.Orders;
+using ECommerceDashboard.DAL.Interfaces;
 using ECommerceDashboard.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -23,20 +18,19 @@ namespace ECommerceDashboard.Controllers
         }
 
         // GET: Orders
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            return View(await _unitOfWork.OrderRepository.GetAll());
+            return View( _unitOfWork.OrderRepository.GetAll());
         }
 
-        // GET: Orders/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
+            if (!id.HasValue)
             {
                 return NotFound();
             }
 
-            var order = await _unitOfWork.OrderRepository.GetById(id);
+            var order = await _unitOfWork.OrderRepository.GetById(id.Value); 
             if (order == null)
             {
                 return NotFound();
@@ -47,10 +41,10 @@ namespace ECommerceDashboard.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> Create()
+        public IActionResult Create()
         {
             var CreateOrder = new CreateOrderViewModel();
-           ViewData["DeliveryId"] = new SelectList(await _unitOfWork.DeliveryRepository.GetAll(), "Id", "Region");
+           ViewData["DeliveryId"] = new SelectList(_unitOfWork.DeliveryRepository.GetAll(), "Id", "Region");
 
             CreateOrder.AvailableProducts =  _unitOfWork.ProductRepository.GetAll();
 
@@ -82,7 +76,7 @@ namespace ECommerceDashboard.Controllers
                     Quantity = i.Quantity
                 }).ToList();
 
-                ViewData["DeliveryId"] = new SelectList(await _unitOfWork.DeliveryRepository.GetAll(), "Id", "Region");
+                ViewData["DeliveryId"] = new SelectList( _unitOfWork.DeliveryRepository.GetAll(), "Id", "Region");
                 await _unitOfWork.OrderRepository.Add(order);
                 return View("Index");
 
@@ -91,7 +85,7 @@ namespace ECommerceDashboard.Controllers
             {
 
                 CreateOrder.AvailableProducts = _unitOfWork.ProductRepository.GetAll();
-                ViewData["DeliveryId"] = new SelectList(await _unitOfWork.DeliveryRepository.GetAll(), "Id", "Region");
+                ViewData["DeliveryId"] = new SelectList( _unitOfWork.DeliveryRepository.GetAll(), "Id", "Region");
                 return View(CreateOrder);
             }
 
@@ -105,7 +99,7 @@ namespace ECommerceDashboard.Controllers
             var product = _unitOfWork.ProductRepository.GetById(productId);
             if (product != null)
             {
-                return Json(new { success = true, price = product.Price });
+                return Json(new { success = true, price = product});
             }
             return Json(new { success = false });
         }
@@ -113,12 +107,12 @@ namespace ECommerceDashboard.Controllers
         // GET: Orders/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
+            if (!id.HasValue)
             {
                 return NotFound();
             }
 
-            var order = await _unitOfWork.OrderRepository.GetById(id);
+            var order = await _unitOfWork.OrderRepository.GetById(id.Value);
             if (order == null)
             {
                 return NotFound();
@@ -163,12 +157,12 @@ namespace ECommerceDashboard.Controllers
         // GET: Orders/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null)
+            if (!id.HasValue)
             {
                 return NotFound();
             }
 
-            var order = await _unitOfWork.OrderRepository.GetById(id);
+            var order = await _unitOfWork.OrderRepository.GetById(id.Value);
             if (order == null)
             {
                 return NotFound();

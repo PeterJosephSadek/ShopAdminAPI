@@ -1,4 +1,4 @@
-﻿using ECommerceDashboard.BLL.Interfaces;
+﻿using ECommerceDashboard.DAL.Interfaces;
 using ECommerceDashboard.DAL.Contexts;
 using ECommerceDashboard.DAL.Entities.Products;
 using Microsoft.EntityFrameworkCore;
@@ -10,7 +10,7 @@ using System.Reflection.PortableExecutable;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ECommerceDashboard.BLL.Repositoy
+namespace ECommerceDashboard.DAL.Repositoy
 {
     public class ReviewRepository : IReviewRepository
     {
@@ -51,10 +51,11 @@ namespace ECommerceDashboard.BLL.Repositoy
 
         }
 
-        public async Task<IEnumerable<Review>> GetAll()
+        public IQueryable<Review> GetAll()
         {
-            var Reviews = await _context.Reviews
-            .Include(p => p.Product).ToListAsync();
+            var Reviews =  _context.Reviews
+            .Include(p => p.Product);
+
             return Reviews;
         }
 

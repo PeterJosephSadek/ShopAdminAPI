@@ -1,6 +1,6 @@
-﻿using ECommerceDashboard.BLL.Interfaces;
-using ECommerceDashboard.DAL.Contexts;
+﻿using ECommerceDashboard.DAL.Contexts;
 using ECommerceDashboard.DAL.Entities.Products;
+using ECommerceDashboard.DAL.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ECommerceDashboard.BLL.Repositoy
+namespace ECommerceDashboard.DAL.Repositoy
 {
     public class ProductRepository : IProductRepository
     {
@@ -19,16 +19,16 @@ namespace ECommerceDashboard.BLL.Repositoy
             _context = context;
         }
 
-        public int Add(Product product)
+        public async Task<int> Add(Product product)
         {
             product.CreatedOn = DateTime.Now;
-            _context.Products.AddAsync(product);
-            return _context.SaveChanges();
+            await _context.Products.AddAsync(product);
+            return  _context.SaveChanges();
         }
 
-        public int Delete(int id)
+        public async Task<int> Delete(int? id)
         {
-            Product? Product =  _context.Products.Find(id);
+            Product? Product = await _context.Products.FindAsync(id);
             if (Product != null)
             {
                 Product.IsDeleted = true;
@@ -36,9 +36,9 @@ namespace ECommerceDashboard.BLL.Repositoy
             return _context.SaveChanges();
         }
 
-        public IEnumerable<Product> GetAll()
+        public IQueryable<Product> GetAll()
         {
-            IEnumerable<Product> products = _context.Products
+            var products = (IQueryable<Product>) _context.Products
                 .Include(p => p.Category)
                 .Include(p => p.Collection)
                 .Include(p => p.Reviews)
@@ -62,14 +62,13 @@ namespace ECommerceDashboard.BLL.Repositoy
 
         }
 
-        public Product GetById(int id)
+        public async Task<Product?> GetById(int? id)
         {
-            Product? product = _context.Products
+            Product? product = await _context.Products
              .Include(p => p.Category)
              .Include(p => p.Collection)
              .Include(p => p.Reviews)
-             .Where(m => m.Id == id)
-             .FirstOrDefault();
+             .FirstOrDefaultAsync(m => m.Id == id);
 
             return (product);
         }
@@ -82,10 +81,10 @@ namespace ECommerceDashboard.BLL.Repositoy
 
         }
 
-        public int Update(Product product)
+        public async Task<int> Update(Product product)
         {
             _context.Products.Update(product);
-            return _context.SaveChanges();
+            return await _context.SaveChangesAsync();
         }
     }
 }

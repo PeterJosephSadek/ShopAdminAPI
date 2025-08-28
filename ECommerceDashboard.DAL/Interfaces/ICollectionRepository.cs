@@ -6,13 +6,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ECommerceDashboard.BLL.Interfaces
+namespace ECommerceDashboard.DAL.Interfaces
 {
     public interface ICollectionRepository
     {
-        Task<IEnumerable<Collection>> GetAll();
-        Task<Collection> GetById(int id);
-        Task<IEnumerable<Product>> GetProductsByCollectionId(int collectionId);
+        IQueryable<Collection> GetAll();
+        IQueryable<Product> GetProductsByCollectionId(int collectionId);
+
+        Task<Collection?> GetById(int? id);
         Task<int> Add(Collection collection);
         Task<int> Update(Collection collection);
         Task<int> Delete(int id);

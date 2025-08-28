@@ -1,6 +1,6 @@
-﻿using ECommerceDashboard.BLL.Interfaces;
-using ECommerceDashboard.DAL.Contexts;
+﻿using ECommerceDashboard.DAL.Contexts;
 using ECommerceDashboard.DAL.Entities.Products;
+using ECommerceDashboard.DAL.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ECommerceDashboard.BLL.Repositoy
+namespace ECommerceDashboard.DAL.Repositoy
 {
 
     public class CollectionRepository : ICollectionRepository
@@ -22,8 +22,10 @@ namespace ECommerceDashboard.BLL.Repositoy
 
         public async Task<int> Add(Collection collection)
         {
-            collection.CreatedOn = DateTime.Now;
-             await _context.Collections.AddAsync(collection);
+            if (collection != null)
+            {
+                await _context.AddAsync(collection);
+            }
             return await _context.SaveChangesAsync();
         }
 
@@ -38,24 +40,23 @@ namespace ECommerceDashboard.BLL.Repositoy
 
         }
 
-        public async Task<IEnumerable<Collection>> GetAll()
+        public IQueryable<Collection> GetAll()
         {
-            return await _context.Collections.OrderBy(p => p.Name).ToListAsync();
+            return  _context.Collections.OrderBy(p => p.Name);
         }
 
-        public async Task<Collection> GetById(int id)
+        public async Task<Collection?> GetById(int? id)
         {
             Collection? collection = await _context.Collections.FindAsync(id);
             return collection;
         }
 
-        public async Task<IEnumerable<Product>> GetProductsByCollectionId(int collectionId)
+        public  IQueryable<Product> GetProductsByCollectionId(int collectionId)
         {
-             return await _context.Products
+            return  _context.Products
                      .Include(p => p.Category)
                      .Include(p => p.Collection)
-                     .Where(p => p.Collection != null && p.Collection.Id == collectionId)
-                     .ToListAsync();
+                     .Where(p => p.Collection != null && p.Collection.Id == collectionId);
         }
 
         public async Task<int> Update(Collection collection)

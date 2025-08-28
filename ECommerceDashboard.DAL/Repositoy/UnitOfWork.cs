@@ -1,11 +1,11 @@
-﻿using ECommerceDashboard.BLL.Interfaces;
+﻿using ECommerceDashboard.DAL.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ECommerceDashboard.BLL.Repositoy
+namespace ECommerceDashboard.DAL.Repositoy
 {
     public class UnitOfWork : IUnitOfWork
     {

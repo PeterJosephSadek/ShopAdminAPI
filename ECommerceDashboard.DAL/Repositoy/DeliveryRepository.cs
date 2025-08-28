@@ -1,4 +1,4 @@
-﻿using ECommerceDashboard.BLL.Interfaces;
+﻿using ECommerceDashboard.DAL.Interfaces;
 using ECommerceDashboard.DAL.Contexts;
 using ECommerceDashboard.DAL.Entities.Orders;
 using Microsoft.EntityFrameworkCore;
@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ECommerceDashboard.BLL.Repositoy
+namespace ECommerceDashboard.DAL.Repositoy
 {
     public class DeliveryRepository : IDeliveryRepository
     {
@@ -42,12 +42,12 @@ namespace ECommerceDashboard.BLL.Repositoy
 
         }
 
-        public async Task<IEnumerable<Delivery>> GetAll()
+        public  IQueryable<Delivery> GetAll()
         {
-            return await _context.Deliveries.ToListAsync();
+            return  _context.Deliveries;
         }
 
-        public async Task<Delivery> GetById(int id)
+        public async Task<Delivery?> GetById(int? id)
         {
             return await _context.Deliveries.FindAsync(id);
         }

@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using ECommerceDashboard.BLL.Interfaces;
 using ECommerceDashboard.DAL.Entities.Products;
+using ECommerceDashboard.DAL.Interfaces;
 
 namespace ECommerceDashboard.Controllers
 {
@@ -27,13 +27,7 @@ namespace ECommerceDashboard.Controllers
             ViewBag.SearchQuery = searchQuery;
 
             // Query the database
-            var query = _unitOfWork.ProductRepository.GetAll();
-
-            // Apply the search filter if a search query is provided
-            if (!string.IsNullOrEmpty(searchQuery))
-            {
-                query = query.Where(p => p.Name.ToLower().Contains(searchQuery.ToLower())).ToList(); // Search by product name
-            }
+            var query = _unitOfWork.ProductRepository.GetProductBySearch(searchQuery);
 
             // Execute the query and pass the results to the view
             return View(query);
@@ -58,11 +52,11 @@ namespace ECommerceDashboard.Controllers
         }
 
         // GET: Products/Create
-        public async Task<IActionResult> Create()
+        public IActionResult Create()
         {
             
-            ViewData["CollectionId"] =  new SelectList(await _unitOfWork.CollectionRepository.GetAll(), "Id", "Name");
-            ViewData["CategoryId"] = new SelectList(await _unitOfWork.CategoryRepository.GetAll(), "Id", "Name");
+            ViewData["CollectionId"] =  new SelectList( _unitOfWork.CollectionRepository.GetAll(), "Id", "Name");
+            ViewData["CategoryId"] = new SelectList( _unitOfWork.CategoryRepository.GetAll(), "Id", "Name");
             return View();
         }
 
@@ -75,29 +69,29 @@ namespace ECommerceDashboard.Controllers
         {
             if (ModelState.IsValid)
             {
-                 _unitOfWork.ProductRepository.Add(product);
+                await _unitOfWork.ProductRepository.Add(product);
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CollectionId"] = new SelectList(await _unitOfWork.CollectionRepository.GetAll(), "Id", "Name");
-            ViewData["CategoryId"] = new SelectList(await _unitOfWork.CategoryRepository.GetAll(), "Id", "Name");
+            ViewData["CollectionId"] = new SelectList( _unitOfWork.CollectionRepository.GetAll(), "Id", "Name");
+            ViewData["CategoryId"] = new SelectList( _unitOfWork.CategoryRepository.GetAll(), "Id", "Name");
             return View(product);
         }
 
         // GET: Products/Edit/5
-        public async Task<IActionResult> Edit(int id)
+        public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            Product product = _unitOfWork.ProductRepository.GetById(id);
+            Product product = await _unitOfWork.ProductRepository.GetById(id);
             if (product == null)
             {
                 return NotFound();
             }
-            ViewData["CategoryId"] = new SelectList(await _unitOfWork.CategoryRepository.GetAll(), "Id", "Name", product.CategoryId);
-            ViewData["CollectionId"] = new SelectList(await _unitOfWork.CollectionRepository.GetAll(), "Id", "Name", product.CollectionId);
+            ViewData["CategoryId"] = new SelectList( _unitOfWork.CategoryRepository.GetAll(), "Id", "Name", product.CategoryId);
+            ViewData["CollectionId"] = new SelectList( _unitOfWork.CollectionRepository.GetAll(), "Id", "Name", product.CollectionId);
             return View(product);
         }
 
@@ -117,7 +111,7 @@ namespace ECommerceDashboard.Controllers
             {
                 try
                 {
-                    _unitOfWork.ProductRepository.Update(product);
+                   await _unitOfWork.ProductRepository.Update(product);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -125,20 +119,20 @@ namespace ECommerceDashboard.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoryId"] = new SelectList(await _unitOfWork.CategoryRepository.GetAll(), "Id", "Name", product.CategoryId);
-            ViewData["CollectionId"] = new SelectList(await _unitOfWork.CollectionRepository.GetAll(), "Id", "Name", product.CollectionId);
+            ViewData["CategoryId"] = new SelectList( _unitOfWork.CategoryRepository.GetAll(), "Id", "Name", product.CategoryId);
+            ViewData["CollectionId"] = new SelectList( _unitOfWork.CollectionRepository.GetAll(), "Id", "Name", product.CollectionId);
             return View(product);
         }
 
         // GET: Products/Delete/5
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            Product product = _unitOfWork.ProductRepository.GetById(id);
+            Product product = await _unitOfWork.ProductRepository.GetById(id);
             if (product == null)
             {
                 return NotFound();
@@ -152,7 +146,7 @@ namespace ECommerceDashboard.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            Product product = _unitOfWork.ProductRepository.GetById(id);
+            Product product = await _unitOfWork.ProductRepository.GetById(id);
             if (product != null)
             {
                 _unitOfWork.ProductRepository.Delete(id);

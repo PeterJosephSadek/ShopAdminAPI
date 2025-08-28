@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ECommerceDashboard.BLL.Interfaces
+namespace ECommerceDashboard.DAL.Interfaces
 {
     public interface IUnitOfWork
     {

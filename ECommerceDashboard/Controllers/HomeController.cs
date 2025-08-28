@@ -2,9 +2,8 @@ using System.Diagnostics;
 using ECommerceDashboard.Models.ViewModels;
 using ECommerceDashboard.DAL.Entities.Orders;
 using Microsoft.AspNetCore.Mvc;
-using ECommerceDashboard.BLL.Repositoy;
 using ECommerceDashboard.Models;
-using ECommerceDashboard.BLL.Interfaces;
+using ECommerceDashboard.DAL.Interfaces;
 
 namespace ECommerceDashboard.Controllers
 {
@@ -19,7 +18,7 @@ namespace ECommerceDashboard.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var Orders = await _unitOfWork.OrderRepository.GetAll();
+            var Orders =  _unitOfWork.OrderRepository.GetAll();
 
             var ProductsList = _unitOfWork.ProductRepository.GetAll();
 

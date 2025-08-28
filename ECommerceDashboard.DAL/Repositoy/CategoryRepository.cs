@@ -1,14 +1,16 @@
-﻿using ECommerceDashboard.BLL.Interfaces;
+﻿
 using ECommerceDashboard.DAL.Contexts;
 using ECommerceDashboard.DAL.Entities.Products;
+using ECommerceDashboard.DAL.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ECommerceDashboard.BLL.Repositoy
+namespace ECommerceDashboard.DAL.Repositoy
 {
 
     public class CategoryRepository : ICategoryRepository
@@ -39,25 +41,22 @@ namespace ECommerceDashboard.BLL.Repositoy
             return await _context.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<Category>> GetAll()
+        public IQueryable<Category> GetAll()
         {
-            return await _context.Categories.ToListAsync();
+            return  _context.Categories;
         }
 
-        public async Task<Category> GetById(int id)
+        public async Task<Category?> GetById(int? id)
         {
-            Category? category = await _context.Categories.FindAsync(id);
-            return category;
-
+            return await _context.Categories.FindAsync(id);
         }
 
-        public async Task<IEnumerable<Product>> GetProductsByCategoryId(int categoryId)
+        public IQueryable<Product> GetProductsByCategoryId(int categoryId)
         {
-            return await _context.Products
+            return _context.Products
                      .Include(p => p.Category)
                      .Include(p => p.Collection)
-                     .Where(p => p.Collection != null && p.Collection.Id == categoryId)
-                     .ToListAsync();
+                     .Where(p => p.Collection != null && p.Collection.Id == categoryId);
         }
 
         public async Task<int> Update(Category category)
@@ -65,5 +64,6 @@ namespace ECommerceDashboard.BLL.Repositoy
             _context.Categories.Update(category);
             return await _context.SaveChangesAsync();
         }
+
     }
 }

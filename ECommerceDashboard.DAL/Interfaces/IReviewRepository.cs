@@ -5,11 +5,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ECommerceDashboard.BLL.Interfaces
+namespace ECommerceDashboard.DAL.Interfaces
 {
     public interface IReviewRepository
     {
-        Task<IEnumerable<Review>> GetAll();
+        IQueryable<Review> GetAll();
+
         Task<Review> GetById(int? id);
         Task<int> Add(Review review);
         Task<int> Update(Review review);

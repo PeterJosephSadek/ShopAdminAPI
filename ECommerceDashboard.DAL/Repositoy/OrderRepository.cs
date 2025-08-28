@@ -1,4 +1,4 @@
-﻿using ECommerceDashboard.BLL.Interfaces;
+﻿using ECommerceDashboard.DAL.Interfaces;
 using ECommerceDashboard.DAL.Contexts;
 using ECommerceDashboard.DAL.Entities.Orders;
 using Microsoft.EntityFrameworkCore;
@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ECommerceDashboard.BLL.Repositoy
+namespace ECommerceDashboard.DAL.Repositoy
 {
     public class OrderRepository : IOrderRepository
     {
@@ -37,25 +37,24 @@ namespace ECommerceDashboard.BLL.Repositoy
 
         }
 
-        public async Task<IEnumerable<Order>> GetAll()
+        public IQueryable<Order> GetAll()
         {
-            return await _context.Orders
+            return _context.Orders
                   .Include(o => o.Status)
                  .Include(o => o.Delivery)
                  .Include(o => o.OrderItems)
-                 .OrderBy(o=>o.Status)
-                 .AsNoTracking()
-                 .ToListAsync();
+                 .OrderBy(o => o.Status);
         }
 
-        public async Task<Order> GetById(int? id)
+        public async Task<Order?> GetById(int id)
         {
             Order? Order = await _context.Orders
                   .Include(o => o.Status)
                   .Include(o => o.Delivery)
                   .Include(o => o.OrderItems)
-                    .ThenInclude(oi=>oi.Product)
-                  .FirstOrDefaultAsync(m => m.Id == id);
+                    .ThenInclude(oi => oi.Product)
+                  .FirstOrDefaultAsync(o => o.Id == id);
+
 
             return (Order);
         }

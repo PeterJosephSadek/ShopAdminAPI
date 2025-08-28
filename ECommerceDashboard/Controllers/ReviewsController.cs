@@ -5,9 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using ECommerceDashboard.BLL.Repositoy;
-using ECommerceDashboard.BLL.Interfaces;
 using ECommerceDashboard.DAL.Entities.Products;
+using ECommerceDashboard.DAL.Interfaces;
 
 
 namespace ECommerceDashboard.Controllers
@@ -22,14 +21,14 @@ namespace ECommerceDashboard.Controllers
         }
 
         // GET: Reviews
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var reviews = await _unitOfWork.ReviewRepository.GetAll();
+            var reviews = _unitOfWork.ReviewRepository.GetAll();
             return View(reviews);
         }
 
         // GET: Reviews/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public IActionResult Details(int? id)
         {
             if (id == null)
             {

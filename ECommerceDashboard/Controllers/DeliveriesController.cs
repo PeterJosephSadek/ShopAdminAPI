@@ -7,8 +7,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ECommerceDashboard.DAL.Contexts;
 using ECommerceDashboard.DAL.Entities.Orders;
-using ECommerceDashboard.BLL.Repositoy;
-using ECommerceDashboard.BLL.Interfaces;
+using ECommerceDashboard.DAL.Interfaces;
+
 
 namespace ECommerceDashboard.Controllers
 {
@@ -22,9 +22,9 @@ namespace ECommerceDashboard.Controllers
         }
 
         // GET: Deliveries
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            return View(await _unitOfWork.DeliveryRepository.GetAll());
+            return View(_unitOfWork.DeliveryRepository.GetAll());
         }
 
         // GET: Deliveries/Details/5
@@ -135,12 +135,12 @@ namespace ECommerceDashboard.Controllers
         // POST: Deliveries/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public  IActionResult DeleteConfirmed(int id)
         {
-            var delivery = await _unitOfWork.DeliveryRepository.GetAll();
+            var delivery = _unitOfWork.DeliveryRepository.GetAll();
             if (delivery != null)
             {
-                await _unitOfWork.DeliveryRepository.Delete(id);
+                 _unitOfWork.DeliveryRepository.Delete(id);
             }
 
             return RedirectToAction(nameof(Index));
